@@ -34,11 +34,6 @@ app.get("/campgrounds", function(request, response) {
   }); 
 });
 
-// New Route - Display a form to create a new campground
-app.get("/campgrounds/new", function(request, response) {
-  response.render("newCamp")
-});
-
 // Create Route - Add a new campground to the DB
 app.post("/campgrounds", function(request, response) {
   var campName = request.body.campName;
@@ -53,6 +48,16 @@ app.post("/campgrounds", function(request, response) {
       response.redirect("/campgrounds");
   });
 
+});
+
+// New Route - Display a form to create a new campground
+app.get("/campgrounds/new", function(request, response) {
+  response.render("newCamp")
+});
+
+// Show Route - Display information about a specific campground
+app.get("/campgrounds/:id", function(request, response) {
+      response.send("Show Page");
 });
 
 app.listen(3000, function() {
