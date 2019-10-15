@@ -41,8 +41,9 @@ app.get("/campgrounds", function(request, response) {
 app.post("/campgrounds", function(request, response) {
   var campName = request.body.campName;
   var campImage = request.body.campImage;
+  var campDescription = request.body.description;
 
-  var newCampground = {name: campName, image: campImage}
+  var newCampground = {name: campName, image: campImage, description: campDescription}
 
   Campground.create(newCampground, function(err, createdCampground) {
     if(err)
