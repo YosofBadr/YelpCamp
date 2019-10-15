@@ -14,10 +14,13 @@ app.set("view engine", "ejs");
 // Schemas
 var campgroundSchema = new mongoose.Schema({
   name: String,
-  image: String
+  image: String,
+  description: String
 });
 
 var Campground = mongoose.model("Campground", campgroundSchema);
+
+// Campground.create({name: "Ring Treat", image:"https://images.unsplash.com/photo-1482376292551-03dfcb8c0c74?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1351&q=80", description: "All the treats you can imagine"})
 
 // Root Route - Display landing page for the application
 app.get("/", function(request, response) {
@@ -57,7 +60,12 @@ app.get("/campgrounds/new", function(request, response) {
 
 // Show Route - Display information about a specific campground
 app.get("/campgrounds/:id", function(request, response) {
-      response.send("Show Page");
+  Campground.findById(request.params.id, function(err, foundCampground){
+    if(err)
+      console.log(err);
+    else
+      response.render("show", {campground: foundCampground});
+  });
 });
 
 app.listen(3000, function() {
