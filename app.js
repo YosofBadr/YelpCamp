@@ -19,6 +19,14 @@ var campGrounds = [
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 
+// Schemas
+var campgroundSchema = new mongoose.Schema({
+  name: String,
+  image: String
+});
+
+var Campground = mongoose.model("Campground", campgroundSchema);
+
 app.get("/", function(request, response) {
   response.render("landing")
 });
