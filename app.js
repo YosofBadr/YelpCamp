@@ -1,7 +1,9 @@
 var express = require("express");
 var app = express();
-
 var bodyParser = require("body-parser");
+var mongoose = require("mongoose");
+
+mongoose.connect("mongodb://localhost/yelp_camp");
 
 var campGrounds = [
   {name: "Indian Ocean", image: "https://images.unsplash.com/photo-1455763916899-e8b50eca9967?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80"},
