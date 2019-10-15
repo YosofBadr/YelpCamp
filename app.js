@@ -5,14 +5,14 @@ var mongoose = require("mongoose");
 
 mongoose.connect("mongodb://localhost:27017/yelp_camp", { useNewUrlParser: true, useUnifiedTopology: true }); 
 
-var campGrounds = [
-  {name: "Hollow Moor", image: "https://images.unsplash.com/photo-1494545261862-dadfb7e1c13d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80"},
-  {name: "Ring Treat", image: "https://images.unsplash.com/photo-1482376292551-03dfcb8c0c74?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1351&q=80"},
-  {name: "Hollow Moor", image: "https://images.unsplash.com/photo-1494545261862-dadfb7e1c13d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80"},
-  {name: "Indian Ocean", image: "https://images.unsplash.com/photo-1455763916899-e8b50eca9967?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80"},
-  {name: "Ring Treat", image: "https://images.unsplash.com/photo-1482376292551-03dfcb8c0c74?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1351&q=80"},
-  {name: "Broke Mountain", image: "https://images.unsplash.com/photo-1500581276021-a4bbcd0050c5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80"},
-]
+// var campGrounds = [
+//   {name: "Hollow Moor", image: "https://images.unsplash.com/photo-1494545261862-dadfb7e1c13d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80"},
+//   {name: "Ring Treat", image: "https://images.unsplash.com/photo-1482376292551-03dfcb8c0c74?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1351&q=80"},
+//   {name: "Hollow Moor", image: "https://images.unsplash.com/photo-1494545261862-dadfb7e1c13d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80"},
+//   {name: "Indian Ocean", image: "https://images.unsplash.com/photo-1455763916899-e8b50eca9967?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80"},
+//   {name: "Ring Treat", image: "https://images.unsplash.com/photo-1482376292551-03dfcb8c0c74?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1351&q=80"},
+//   {name: "Broke Mountain", image: "https://images.unsplash.com/photo-1500581276021-a4bbcd0050c5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80"},
+// ]
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
@@ -30,7 +30,12 @@ app.get("/", function(request, response) {
 });
 
 app.get("/campgrounds", function(request, response) {
-  response.render("campgrounds", {campGrounds: campGrounds});
+  Campground.find({}, function(err, allCampgrounds) {
+    if (err)
+      console.log(err);
+    else
+      response.render("campgrounds", {campGrounds: allCampgrounds});
+  }); 
 });
 
 app.post("/campgrounds", function(request, response) {
@@ -38,9 +43,14 @@ app.post("/campgrounds", function(request, response) {
   var campImage = request.body.campImage;
 
   var newCampground = {name: campName, image: campImage}
-  campGrounds.push(newCampground);
 
-  response.redirect("/campgrounds");
+  Campground.create(newCampground, function(err, createdCampground) {
+    if(err)
+      console.log(err);
+    else
+      response.redirect("/campgrounds");
+  });
+
 });
 
 app.get("/campgrounds/new", function(request, response) {
