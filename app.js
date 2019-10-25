@@ -10,6 +10,10 @@ app.set("view engine", "ejs");
 
 // Schemas
 var Campground = require("./models/campground");
+var Comment = require("./models/comment");
+
+var seedDB = require("./seeds");
+seedDB();
 
 // Root Route - Display landing page for the application
 app.get("/", function(request, response) {
@@ -50,11 +54,14 @@ app.get("/campgrounds/new", function(request, response) {
 
 // Show Route - Display information about a specific campground
 app.get("/campgrounds/:id", function(request, response) {
-  Campground.findById(request.params.id, function(err, foundCampground){
+  Campground.findById(request.params.id).populate("comments").exec(function(err, foundCampground){
     if(err)
       console.log(err);
     else
+    {
+      console.log(foundCampground);
       response.render("show", {campground: foundCampground});
+    }
   });
 });
 
