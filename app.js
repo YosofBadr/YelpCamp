@@ -5,22 +5,11 @@ var mongoose = require("mongoose");
 
 mongoose.connect("mongodb://localhost:27017/yelp_camp", { useNewUrlParser: true, useUnifiedTopology: true }); 
 
-//   {name: "Ring Treat", 
-// image: "https://images.unsplash.com/photo-1482376292551-03dfcb8c0c74?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1351&q=80"},
-
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 
 // Schemas
-var campgroundSchema = new mongoose.Schema({
-  name: String,
-  image: String,
-  description: String
-});
-
-var Campground = mongoose.model("Campground", campgroundSchema);
-
-// Campground.create({name: "Ring Treat", image:"https://images.unsplash.com/photo-1482376292551-03dfcb8c0c74?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1351&q=80", description: "All the treats you can imagine"})
+var Campground = require("./models/campground");
 
 // Root Route - Display landing page for the application
 app.get("/", function(request, response) {
