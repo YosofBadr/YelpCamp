@@ -68,8 +68,14 @@ app.get("/campgrounds/:id", function(request, response) {
 
 // Comment Routes ==============================
 
+// New Route - Display a form to create a new comment for a campground
 app.get("/campgrounds/:id/comments/new", function(request, response) {
-  response.render("comments/new");
+  Campground.findById(request.params.id, function(err, campground){
+    if(err)
+      console.log("An error has occured: " + err);
+    else
+      response.render("comments/new", {campground: campground});
+  });
 });
 
 app.listen(3000, function() {
