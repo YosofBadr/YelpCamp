@@ -1,7 +1,12 @@
-// Comment Routes ==============================
+var express = require("express");
+var router = express.Router();
 
+var Campground = require("../models/campground");
+var Comment = require("../models/comment");
+
+// Comment Routes ==============================
 // New Route - Display a form to create a new comment for a campground
-app.get("/campgrounds/:id/comments/new", isLoggedIn, function(request, response) {
+router.get("/campgrounds/:id/comments/new", isLoggedIn, function(request, response) {
   Campground.findById(request.params.id, function(err, campground){
     if(err)
       console.log("An error has occured: " + err);
@@ -12,7 +17,7 @@ app.get("/campgrounds/:id/comments/new", isLoggedIn, function(request, response)
 
 
 // Create Route - Add a new comment and associate it to a campground in the DB
-app.post("/campgrounds/:id/comments", isLoggedIn, function(request, response){
+router.post("/campgrounds/:id/comments", isLoggedIn, function(request, response){
   Campground.findById(request.params.id, function(err, campground){
     if(err) {
       console.log("An error has occured: " + err);
@@ -31,3 +36,13 @@ app.post("/campgrounds/:id/comments", isLoggedIn, function(request, response){
     }
   });
 });
+
+// Checks if a user is authenticated, if not then user is redirected to the login page
+function isLoggedIn(req, res, next){
+  if(req.isAuthenticated()){
+    return next();
+  }
+  res.redirect("/login");
+}
+
+module.exports = router;

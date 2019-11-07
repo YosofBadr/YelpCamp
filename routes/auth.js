@@ -1,17 +1,22 @@
+var express = require("express");
+var router = express.Router();
+var passport = require("passport");
+var User = require("../models/user");
+
 // Root Route - Display landing page for the application
-app.get("/", function(request, response) {
+router.get("/", function(request, response) {
   response.render("landing")
 });
 
 // Authentication Routes ==============================
 
 // Show Route - Displays Register Form
-app.get("/register", function(req, res){
+router.get("/register", function(req, res){
   res.render("register");
 });
 
 // Create Route - Handles user registration
-app.post("/register", function(req, res){
+router.post("/register", function(req, res){
   var newUser = new User({username: req.body.username});
   User.register(newUser, req.body.password, function(err, user){
     if(err){
@@ -25,17 +30,17 @@ app.post("/register", function(req, res){
 });
 
 // Show Route - Displays Login Form
-app.get("/login", function(req, res){
+router.get("/login", function(req, res){
   res.render("login");
 });
 
 // Post Route - Handles user login
-app.post("/login", passport.authenticate("local", {successRedirect: "/campgrounds", failureRedirect: "/login"}), function(req, res){
+router.post("/login", passport.authenticate("local", {successRedirect: "/campgrounds", failureRedirect: "/login"}), function(req, res){
   res.send("Loging in");
 });
 
 // Logout Route
-app.get("/logout", function(req, res){
+router.get("/logout", function(req, res){
   req.logout();
   res.redirect("/campgrounds");
 });
@@ -47,3 +52,5 @@ function isLoggedIn(req, res, next){
   }
   res.redirect("/login");
 }
+
+module.exports = router;

@@ -19,6 +19,11 @@ var Campground = require("./models/campground");
 var Comment = require("./models/comment");
 var User = require("./models/user");
 
+// Routes
+var commentRoutes = require("./routes/comments");
+var campgroundRoutes = require("./routes/campgrounds");
+var authRoutes = require("./routes/auth");
+
 var seedDB = require("./seeds");
 seedDB();
 
@@ -40,6 +45,10 @@ app.use(function(req, res, next){
   res.locals.currentUser = req.user;
   next();
 });
+
+app.use(campgroundRoutes);
+app.use(commentRoutes);
+app.use(authRoutes);
 
 app.listen(3000, function() {
   console.log("YelpCamp listening on 3000");
