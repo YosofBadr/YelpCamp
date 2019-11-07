@@ -26,7 +26,7 @@ seedDB();
 app.use(require("express-session")({
   secret: "Anything I want can go here",
   resave: false,
-  saveUninitialize: false
+  saveUninitialized: false
 }));
 
 app.use(passport.initialize());
@@ -117,6 +117,27 @@ app.post("/campgrounds/:id/comments", function(request, response){
         }
       });
     }
+  });
+});
+
+// Authentication Routes ==============================
+
+// Show Route - Displays Register Form
+app.get("/register", function(req, res){
+  res.render("register");
+});
+
+// Create Route - Handles user registration
+app.post("/register", function(req, res){
+  var newUser = new User({username: req.body.username});
+  User.register(newUser, req.body.password, function(err, user){
+    if(err){
+      console.log("An error has occured: " + err);
+      return res.redirect("register");
+    }
+    passport.authenticate("local")(req, res, function(){
+      res.redirect("/campgrounds");
+    });
   });
 });
 
