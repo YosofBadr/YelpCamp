@@ -25,7 +25,7 @@ var campgroundRoutes = require("./routes/campgrounds");
 var authRoutes = require("./routes/auth");
 
 var seedDB = require("./seeds");
-seedDB();
+// seedDB();
 
 // Passport Config
 app.use(require("express-session")({

@@ -19,14 +19,18 @@ router.post("/campgrounds", isLoggedIn, function(request, response) {
   var campName = request.body.campName;
   var campImage = request.body.campImage;
   var campDescription = request.body.description;
-
-  var newCampground = {name: campName, image: campImage, description: campDescription}
-
+  var authorDetails = {
+    id: request.user._id,
+    username: request.user.username
+  }
+  var newCampground = {name: campName, image: campImage, description: campDescription, author:authorDetails}
   Campground.create(newCampground, function(err, createdCampground) {
     if(err)
-      console.log(err);
-    else
+    console.log(err);
+    else {
+      console.log(createdCampground);
       response.redirect("/campgrounds");
+    }
   });
 
 });
