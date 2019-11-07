@@ -17,6 +17,7 @@ app.use(express.static(__dirname + "/public"));
 // Schemas
 var Campground = require("./models/campground");
 var Comment = require("./models/comment");
+var User = require("./models/user");
 
 var seedDB = require("./seeds");
 seedDB();
