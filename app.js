@@ -35,6 +35,12 @@ passport.use(new passportLocal(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+// Middleware to pass current user data to all routes
+app.use(function(req, res, next){
+  res.locals.currentUser = req.user;
+  next();
+});
+
 // Root Route - Display landing page for the application
 app.get("/", function(request, response) {
   response.render("landing")
@@ -46,7 +52,7 @@ app.get("/campgrounds", function(request, response) {
     if (err)
       console.log(err);
     else
-      response.render("campgrounds/index", {campGrounds: allCampgrounds});
+      response.render("campgrounds/index", {campGrounds: allCampgrounds, currentUser: request.user});
   }); 
 });
 
