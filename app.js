@@ -22,6 +22,19 @@ var User = require("./models/user");
 var seedDB = require("./seeds");
 seedDB();
 
+// Passport Config
+app.use(require("express-session")({
+  secret: "Anything I want can go here",
+  resave: false,
+  saveUninitialize: false
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new passportLocal(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 // Root Route - Display landing page for the application
 app.get("/", function(request, response) {
   response.render("landing")
