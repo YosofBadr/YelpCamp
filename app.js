@@ -3,6 +3,11 @@ var app = express();
 var bodyParser = require("body-parser");
 var mongoose = require("mongoose");
 
+// ================ AUTHENTICATION ======================
+var passport = require("passport");
+var passportLocal = require("passport-local");
+
+
 mongoose.connect("mongodb://localhost:27017/yelp_camp", { useNewUrlParser: true, useUnifiedTopology: true }); 
 
 app.use(bodyParser.urlencoded({extended: true}));
