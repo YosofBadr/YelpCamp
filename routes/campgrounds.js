@@ -1,6 +1,9 @@
 var express = require("express");
 var router = express.Router();
 
+var Campground = require("../models/campground");
+
+
 // Index Route - Display all campgrounds
 router.get("/campgrounds", function(request, response) {
   Campground.find({}, function(err, allCampgrounds) {
@@ -30,7 +33,7 @@ router.post("/campgrounds", function(request, response) {
 
 // New Route - Display a form to create a new campground
 router.get("/campgrounds/new", function(request, response) {
-  response.render("new")
+  response.render("../views/campgrounds/new")
 });
 
 // Show Route - Display information about a specific campground
