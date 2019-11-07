@@ -141,6 +141,16 @@ app.post("/register", function(req, res){
   });
 });
 
+// Show Route - Displays Login Form
+app.get("/login", function(req, res){
+  res.render("login");
+});
+
+// Post Route - Handles user login
+app.post("/login", passport.authenticate("local", {successRedirect: "/campgrounds", failureRedirect: "/login"}), function(req, res){
+  res.send("Loging in");
+});
+
 app.listen(3000, function() {
   console.log("YelpCamp listening on 3000");
 });
