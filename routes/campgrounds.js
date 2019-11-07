@@ -15,7 +15,7 @@ router.get("/campgrounds", function(request, response) {
 });
 
 // Create Route - Add a new campground to the DB
-router.post("/campgrounds", function(request, response) {
+router.post("/campgrounds", isLoggedIn, function(request, response) {
   var campName = request.body.campName;
   var campImage = request.body.campImage;
   var campDescription = request.body.description;
@@ -32,7 +32,7 @@ router.post("/campgrounds", function(request, response) {
 });
 
 // New Route - Display a form to create a new campground
-router.get("/campgrounds/new", function(request, response) {
+router.get("/campgrounds/new", isLoggedIn, function(request, response) {
   response.render("../views/campgrounds/new")
 });
 
@@ -48,5 +48,13 @@ router.get("/campgrounds/:id", function(request, response) {
     }
   });
 });
+
+// Checks if a user is authenticated, if not then user is redirected to the login page
+function isLoggedIn(req, res, next){
+  if(req.isAuthenticated()){
+    return next();
+  }
+  res.redirect("/login");
+}
 
 module.exports = router;
