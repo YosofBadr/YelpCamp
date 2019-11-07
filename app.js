@@ -89,7 +89,7 @@ app.get("/campgrounds/:id", function(request, response) {
 // Comment Routes ==============================
 
 // New Route - Display a form to create a new comment for a campground
-app.get("/campgrounds/:id/comments/new", function(request, response) {
+app.get("/campgrounds/:id/comments/new", isLoggedIn, function(request, response) {
   Campground.findById(request.params.id, function(err, campground){
     if(err)
       console.log("An error has occured: " + err);
@@ -100,7 +100,7 @@ app.get("/campgrounds/:id/comments/new", function(request, response) {
 
 
 // Create Route - Add a new comment and associate it to a campground in the DB
-app.post("/campgrounds/:id/comments", function(request, response){
+app.post("/campgrounds/:id/comments", isLoggedIn, function(request, response){
   Campground.findById(request.params.id, function(err, campground){
     if(err) {
       console.log("An error has occured: " + err);
@@ -156,6 +156,14 @@ app.get("/logout", function(req, res){
   req.logout();
   res.redirect("/campgrounds");
 });
+
+// Checks if a user is authenticated, if not then user is redirected to the login page
+function isLoggedIn(req, res, next){
+  if(req.isAuthenticated()){
+    return next();
+  }
+  res.redirect("/login");
+}
 
 app.listen(3000, function() {
   console.log("YelpCamp listening on 3000");
