@@ -4,7 +4,6 @@ var router = express.Router();
 var Campground = require("../models/campground");
 var Comment = require("../models/comment");
 
-// Comment Routes ==============================
 // New Route - Display a form to create a new comment for a campground
 router.get("/campgrounds/:id/comments/new", isLoggedIn, function(request, response) {
   Campground.findById(request.params.id, function(err, campground){
@@ -14,7 +13,6 @@ router.get("/campgrounds/:id/comments/new", isLoggedIn, function(request, respon
       response.render("comments/new", {campground: campground});
   });
 });
-
 
 // Create Route - Add a new comment and associate it to a campground in the DB
 router.post("/campgrounds/:id/comments", isLoggedIn, function(request, response){
@@ -39,6 +37,26 @@ router.post("/campgrounds/:id/comments", isLoggedIn, function(request, response)
         }
       });
     }
+  });
+});
+
+// Edit route
+router.get("/campgrounds/:id/comments/:comment_id/edit", function(req, res){
+  Comment.findById(req.params.comment_id, function(err, foundComment){
+    if(err)
+      console.log(err);
+    else
+      res.render("comments/edit", {campground_id: req.params.id, comment: foundComment});
+  });
+});
+
+// Update route
+router.put("/campgrounds/:id/comments/:comment_id", function(req, res){
+  Comment.findByIdAndUpdate(req.params.comment_id, req.body.comment, function(err, updatedComment){
+    if(err)
+      res.redirect("back");
+    else
+      res.redirect("/campgrounds/" + req.params.id);
   });
 });
 
