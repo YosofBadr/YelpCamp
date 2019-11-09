@@ -17,7 +17,8 @@
               <h4 class="pull-right"> £10/night</h4>
               <h4><a> <%= campground.name %> </a></h1>
               <p> <%= campground.description %></p>
-              <p> This is <%= campground.author.username.toUpperCase() %>'s campground</p>
+              <p> This is <%= campground.author.username.toUpperCase() %>'s campground </p>
+              <a href="/campgrounds/<%= campground._id %>/edit" class="btn btn-warning"> Edit </a>
             </div>
         </div>
         <div class="well">

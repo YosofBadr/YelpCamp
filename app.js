@@ -2,6 +2,8 @@ var express = require("express");
 var app = express();
 var bodyParser = require("body-parser");
 var mongoose = require("mongoose");
+var methodOverride = require("method-override");
+
 
 // ================ AUTHENTICATION ======================
 var passport = require("passport");
@@ -10,6 +12,7 @@ var passportLocal = require("passport-local");
 
 mongoose.connect("mongodb://localhost:27017/yelp_camp", { useNewUrlParser: true, useUnifiedTopology: true }); 
 
+app.use(methodOverride("_method"));
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
