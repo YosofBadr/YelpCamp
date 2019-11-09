@@ -24,19 +24,19 @@ function seedDB(){
    //Remove all campgrounds
    Campground.deleteMany({}, function(err){
         if(err){
-            console.log(err);
+            req.flash("error", err.message);
         }
         console.log("removed campgrounds!");
         Comment.deleteMany({}, function(err) {
             if(err){
-                console.log(err);
+                req.flash("error", err.message);
             }
             console.log("removed comments!");
              //add a few campgrounds
             // data.forEach(function(seed){
             //     Campground.create(seed, function(err, campground){
             //         if(err){
-            //             console.log(err)
+            //             req.flash("error", err.message);
             //         } else {
             //             console.log("added a campground");
             //             //create a comment
@@ -46,7 +46,7 @@ function seedDB(){
             //                     author: "Homer"
             //                 }, function(err, comment){
             //                     if(err){
-            //                         console.log(err);
+            //                         req.flash("error", err.message);
             //                     } else {
             //                         campground.comments.push(comment);
             //                         campground.save();

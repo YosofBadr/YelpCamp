@@ -52,6 +52,13 @@ app.use(function(req, res, next){
   next();
 });
 
+// Middleware to pass message needed for flash to all routes
+app.use(function(req, res, next){
+  res.locals.error = req.flash("error");
+  res.locals.success = req.flash("success");
+  next();
+});
+
 app.use(campgroundRoutes);
 app.use(commentRoutes);
 app.use(authRoutes);

@@ -6,18 +6,23 @@ var middlewareObj = {}
 middlewareObj.checkCampgroundAuthorisation = function(req, res, next){
   if(req.isAuthenticated()){
     Campground.findById(req.params.id, function(err, foundCampground){
-      if(err)
+      if(err) {
+        req.flash("error", "" + err);
         res.redirect("back");
+      }
       else {
         if(foundCampground.author.id.equals(req.user._id)){
           next();
         }
-        else
+        else {
+          req.flash("error", "Permissions required");
           res.redirect("back");
+        }
       }
     });
   }
   else {
+    req.flash("error", "Login required");
     res.redirect("back");
   }  
 }
@@ -25,18 +30,23 @@ middlewareObj.checkCampgroundAuthorisation = function(req, res, next){
 middlewareObj.checkCommentAuthorisation = function(req, res, next){
   if(req.isAuthenticated()){
     Comment.findById(req.params.comment_id, function(err, foundComment){
-      if(err)
+      if(err) {
+        req.flash("error", "" + err);
         res.redirect("back");
+      }
       else {
         if(foundComment.author.id.equals(req.user._id)){
           next();
         }
-        else
+        else {
+          req.flash("error", "Permissions required");
           res.redirect("back");
+        }
       }
     });
   }
   else {
+    req.flash("error", "Login required");
     res.redirect("back");
   }  
 }
@@ -46,6 +56,7 @@ middlewareObj.isLoggedIn = function(req, res, next){
   if(req.isAuthenticated()){
     return next();
   }
+  req.flash("error", "Login required");
   res.redirect("/login");
 }
 

@@ -10,7 +10,7 @@ var middleware = require("../middleware");
 router.get("/campgrounds", function(request, response) {
   Campground.find({}, function(err, allCampgrounds) {
     if (err)
-      console.log(err);
+      req.flash("error", err.message);
     else
       response.render("campgrounds/index", {campGrounds: allCampgrounds, currentUser: request.user});
   }); 
@@ -28,7 +28,7 @@ router.post("/campgrounds", middleware.isLoggedIn, function(request, response) {
   var newCampground = {name: campName, image: campImage, description: campDescription, author:authorDetails}
   Campground.create(newCampground, function(err, createdCampground) {
     if(err)
-    console.log(err);
+      req.flash("error", err.message);
     else {
       response.redirect("/campgrounds");
     }
@@ -45,7 +45,7 @@ router.get("/campgrounds/new", middleware.isLoggedIn, function(request, response
 router.get("/campgrounds/:id", function(request, response) {
   Campground.findById(request.params.id).populate("comments").exec(function(err, foundCampground){
     if(err)
-      console.log(err);
+      req.flash("error", err.message); 
     else
       response.render("campgrounds/show", {campground: foundCampground});
   });
@@ -72,7 +72,7 @@ router.put("/campgrounds/:id", middleware.checkCampgroundAuthorisation, function
 router.delete("/campgrounds/:id", middleware.checkCampgroundAuthorisation, function(req, res){
   Campground.findByIdAndRemove(req.params.id, function(err){
     if(err)
-      console.log(err);
+      req.flash("error", err.message);
   
     res.redirect("/campgrounds");
   });
