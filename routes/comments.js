@@ -4,8 +4,10 @@ var router = express.Router();
 var Campground = require("../models/campground");
 var Comment = require("../models/comment");
 
+var middleware = require("../middleware");
+
 // New Route - Display a form to create a new comment for a campground
-router.get("/campgrounds/:id/comments/new", isLoggedIn, function(request, response) {
+router.get("/campgrounds/:id/comments/new", middleware.isLoggedIn, function(request, response) {
   Campground.findById(request.params.id, function(err, campground){
     if(err)
       console.log("An error has occured: " + err);
@@ -15,7 +17,7 @@ router.get("/campgrounds/:id/comments/new", isLoggedIn, function(request, respon
 });
 
 // Create Route - Add a new comment and associate it to a campground in the DB
-router.post("/campgrounds/:id/comments", isLoggedIn, function(request, response){
+router.post("/campgrounds/:id/comments", middleware.isLoggedIn, function(request, response){
   Campground.findById(request.params.id, function(err, campground){
     if(err) {
       console.log("An error has occured: " + err);
@@ -41,7 +43,7 @@ router.post("/campgrounds/:id/comments", isLoggedIn, function(request, response)
 });
 
 // Edit route
-router.get("/campgrounds/:id/comments/:comment_id/edit", checkCommentAuthorisation, function(req, res){
+router.get("/campgrounds/:id/comments/:comment_id/edit", middleware.checkCommentAuthorisation, function(req, res){
   Comment.findById(req.params.comment_id, function(err, foundComment){
     if(err)
       console.log(err);
@@ -51,7 +53,7 @@ router.get("/campgrounds/:id/comments/:comment_id/edit", checkCommentAuthorisati
 });
 
 // Update route
-router.put("/campgrounds/:id/comments/:comment_id", checkCommentAuthorisation, function(req, res){
+router.put("/campgrounds/:id/comments/:comment_id", middleware.checkCommentAuthorisation, function(req, res){
   Comment.findByIdAndUpdate(req.params.comment_id, req.body.comment, function(err, updatedComment){
     if(err)
       res.redirect("back");
@@ -61,7 +63,7 @@ router.put("/campgrounds/:id/comments/:comment_id", checkCommentAuthorisation, f
 });
 
 // Destroy route
-router.delete("/campgrounds/:id/comments/:comment_id", checkCommentAuthorisation, function(req, res){
+router.delete("/campgrounds/:id/comments/:comment_id", middleware.checkCommentAuthorisation, function(req, res){
   Comment.findByIdAndRemove(req.params.comment_id, function(err){
     if(err)
       console.log(err);
@@ -69,32 +71,5 @@ router.delete("/campgrounds/:id/comments/:comment_id", checkCommentAuthorisation
       res.redirect("/campgrounds/" + req.params.id);
   });
 });
-
-// Checks if a user is authenticated, if not then user is redirected to the login page
-function isLoggedIn(req, res, next){
-  if(req.isAuthenticated()){
-    return next();
-  }
-  res.redirect("/login");
-}
-
-function checkCommentAuthorisation(req, res, next){
-  if(req.isAuthenticated()){
-    Comment.findById(req.params.comment_id, function(err, foundComment){
-      if(err)
-        res.redirect("back");
-      else {
-        if(foundComment.author.id.equals(req.user._id)){
-          next();
-        }
-        else
-          res.redirect("back");
-      }
-    });
-  }
-  else {
-    res.redirect("back");
-  }  
-}
 
 module.exports = router;
