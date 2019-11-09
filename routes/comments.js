@@ -60,6 +60,17 @@ router.put("/campgrounds/:id/comments/:comment_id", function(req, res){
   });
 });
 
+// Destroy route
+router.delete("/campgrounds/:id/comments/:comment_id", function(req, res){
+  Comment.findByIdAndRemove(req.params.comment_id, function(err){
+    if(err)
+      console.log(err);
+    else
+      res.redirect("/campgrounds/" + req.params.id);
+  });
+});
+
+
 // Checks if a user is authenticated, if not then user is redirected to the login page
 function isLoggedIn(req, res, next){
   if(req.isAuthenticated()){
