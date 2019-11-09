@@ -28,7 +28,6 @@ router.post("/campgrounds", isLoggedIn, function(request, response) {
     if(err)
     console.log(err);
     else {
-      console.log(createdCampground);
       response.redirect("/campgrounds");
     }
   });
@@ -46,10 +45,7 @@ router.get("/campgrounds/:id", function(request, response) {
     if(err)
       console.log(err);
     else
-    {
-      console.log(foundCampground);
       response.render("campgrounds/show", {campground: foundCampground});
-    }
   });
 });
 
@@ -70,6 +66,16 @@ router.put("/campgrounds/:id", function(req, res){
       res.redirect("/campgrounds");
     else
       res.redirect("/campgrounds/" + req.params.id);
+  });
+});
+
+// Delete Route
+router.delete("/campgrounds/:id", function(req, res){
+  Campground.findByIdAndRemove(req.params.id, function(err){
+    if(err)
+      console.log(err);
+  
+    res.redirect("/campgrounds");
   });
 });
 
